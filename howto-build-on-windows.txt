@@ -1,0 +1,9 @@
+# Install Python 3
+mkdir pyinstaller
+cd pyinstaller
+python.exe -m venv venv
+venv\Scripts\pip.exe install pyinstaller pycdlib
+cd ..
+# unzip github archive
+cd t128-customize-otp-iso-image
+..\pyinstaller\venv\Scripts\pyinstaller.exe --onefile t128-customize-otp-iso-image.py
