@@ -108,8 +108,11 @@ def add_pre_post_bootstrap(iso, args):
         stage_default = globals().get('{}_bootstrap'.format(stage).upper())
         path = '/bootstrap/{}-bootstrap'.format(stage)
         if filename:
-            with open(filename) as fd:
-                content = filename.read()
+            try:
+                with open(filename) as fd:
+                    content = fd.read()
+            except:
+                raise
         elif stage_default:
                 content = stage_default
         else:
