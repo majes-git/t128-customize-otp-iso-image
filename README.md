@@ -14,6 +14,12 @@ In order to be able to have one USB drive for the whole procedure `t128-customiz
 5. extend the kickstart configuration on the ISO image to copy the quickstart file and scripts onto the target system (SSD)
 6. finalize (write) the customized ISO image
 
+## Custom quickstart files
+
+In some situations it may be desirable to use a custom quickstart file, e.g. a router-specific file or a file with additional generic 128T/SSR configuration items.
+
+The `--quickstart` command line parameter allows to provide such a file, which overrides the auto-generated generic quickstart file.
+
 ## Supported operating systems
 
 Inside the `binaries` directory there are standalone executables for the following operating systems:
@@ -67,4 +73,6 @@ chmod +x t128-customize-otp-iso-image.pyz
 
 As part of the bootstrap process it is possible to incorporate a script `pre-bootstap`and/or `post-bootstrap`
 By default a post-bootstrap script is added, which enables all ethernet interfaces on the target router to allow zero-touch provisioning (ZTP).
+
+The `--no-scriptlets` command line parameter allows to disable auto-generated `pre-bootstap`and `post-bootstrap` scripts. This might make sense if a custom quickstart file is provided and conductor connection should be established via 128T/SSR rather than Linux interfaces.
 
