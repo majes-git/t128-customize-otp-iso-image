@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Copyright (c) Juniper Networks, Inc. 2022. All rights reserved.
+
+# --- config here ---
+OOB_PCI_ADDRESS="0000:00:13.0"
+OOB_IP_ADDRESS="100.100.128.128"
+OOB_PREFIX_LEN="24"
+OOB_GATEWAY="100.100.128.1"
+OOB_DNS1="8.8.8.8"
+OOB_DNS2="8.8.4.4"
+# --- config end ---
+
+# search interface name for pci address and write ifcfg file
+{
+  for path in /sys/class/net/e*; do
+    udevadm info -q path -p $path
+  done
+} \
+| awk -F/ '{ if ($5 ~ /virtio*/) { print $4, $7 } else { print $5, $7 } }' \
+| while read pci interface; do if [ "$pci" = "$OOB_PCI_ADDRESS" ]; then
+echo "Configuring interface $interface as static out-of-band"
+cat > /etc/sysconfig/network-scripts/ifcfg-$interface <<EOF
+DEVICE=$interface
+TYPE=Ethernet
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=${OOB_IP_ADDRESS}
+PREFIX=${OOB_PREFIX_LEN}
+GATEWAY=${OOB_GATEWAY}
+DNS1=${OOB_DNS1}
+DNS2=${OOB_DNS2}
+NM_CONTROLLED=no
+EOF
+fi
+done
