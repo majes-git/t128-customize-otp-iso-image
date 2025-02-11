@@ -5,13 +5,15 @@ Typically, when an unmodified ISO image `128T-<version>OTP.v1.x86_64.iso` is use
 
 Details are documented at: [https://docs.128technology.com/docs/intro\_otp\_iso\_install](https://docs.128technology.com/docs/intro_otp_iso_install)
 
+As of SSR release 6.3.0 a new image format called Universal ISO (`SSR-<version>.x86_64.ibu-v1.iso` - image based installation) is being used. This tools also supports the new UISO format and injects the proper files (`onboarding-config.json` etc.) for automatic onboarding into the ISO.
+
 In order to be able to have one USB drive for the whole procedure `t128-customize-otp-iso-image` runs these steps:
 
-1. read an unmodified 128T ISO image as source for a customized ISO (output file)
-2. generate a generic quickstart file including the IP address(es) of the 128T/SSR conductor node(s)
-3. add this quickstart file together with helper scripts to the new ISO into the `bootstrap` directory
+1. read an unmodified 128T/SSR ISO image as source for a customized ISO (output file)
+2. generate a generic quickstart/onboarding file including the IP address(es) of the 128T/SSR conductor node(s)
+3. add this quickstart/onboarding file together with helper scripts to the new ISO into the `bootstrap` directory
 4. also add a file `conductors.txt` which contains the same IP address(es)
-5. extend the kickstart configuration on the ISO image to copy the quickstart file and scripts onto the target system (SSD)
+5. extend the kickstart configuration/installer script on the ISO image to copy the quickstart file and scripts onto the target system (SSD)
 6. finalize (write) the customized ISO image
 
 ## Custom quickstart files
@@ -20,12 +22,17 @@ In some situations it may be desirable to use a custom quickstart file, e.g. a r
 
 The `--quickstart` command line parameter allows to provide such a file, which overrides the auto-generated generic quickstart file.
 
+## Custom onboarding files
+
+Similar to the previous option it is supported to inject a custom `onboarding-config.json` for Universal ISO images (ibu-v1).
+
+The `--onboarding` command line parameter allows to provide such a file, which overrides the auto-generated generic onboarding file.
+
 ## Supported operating systems
 
 Inside the `binaries` directory there are standalone executables for the following operating systems:
 
 * Windows (exe file)
-* macOS (older versions - before macOS 12 - that are not shipped with Python 3)
 * Linux (and newer macOS systems) with installed Python 3 (.pyz file)
 
 The minimal syntax is:
@@ -46,22 +53,9 @@ Afterwards open a shell (*Command Prompt*, cmd.exe), change into this folder and
 
 ![](windows10.png)
 
-### Running on macOS
+### Running on macOS and Linux
 
-Similar to windows, just copy the macOS binary together with the ISO image into a subfolder `128T` at `Downloads` and run:
-
-```
-cd ~/Downloads/128T
-chmod +x t128-customize-otp-iso-image
-./t128-customize-otp-iso-image -i 128T-<version>OTP.v1.x86_64.iso -c 10.128.128.128
-```
-
-Note: the binary needs to be executable. There might be a security warning by macOS referring to this downloaded binary. If this is the case give permission at System Preferences > Security.
-
-
-### Running on Linux
-
-On modern Linux installations there should be python3 pre-installed, so the .pyz file can be used:
+On modern macOS/Linux installations there should be python3 pre-installed, so the .pyz file can be used:
 
 ```
 cd ~/Downloads/128T
@@ -75,4 +69,3 @@ As part of the bootstrap process it is possible to incorporate a script `pre-boo
 By default a post-bootstrap script is added, which enables all ethernet interfaces on the target router to allow zero-touch provisioning (ZTP).
 
 The `--no-scriptlets` command line parameter allows to disable auto-generated `pre-bootstap`and `post-bootstrap` scripts. This might make sense if a custom quickstart file is provided and conductor connection should be established via 128T/SSR rather than Linux interfaces.
-
