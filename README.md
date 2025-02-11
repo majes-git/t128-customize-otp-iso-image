@@ -35,15 +35,21 @@ Inside the `binaries` directory there are standalone executables for the followi
 * Windows (exe file)
 * Linux (and newer macOS systems) with installed Python 3 (.pyz file)
 
-The minimal syntax is:
+The minimal syntax is for OTP (package based = PBU):
 
 ```
 t128-customize-otp-iso-image -i 128T-<version>OTP.v1.x86_64.iso -c 10.128.128.128
 ```
+... or for Universal ISO (image based = IBU):
+
+```
+t128-customize-otp-iso-image -i SSR-<version>.x86_64.ibu-v1.iso -c 10.128.128.128
+```
+
 
 In this example `10.128.128.128` represents the IP address of the conductor and the ISO image is the unmodified file as downloaded from SSR software repositories.
 
-An output filename can be given using the `-o` switch. If omitted, the output filename is generated based on the input filename suffixed by `-quickstart`
+An output filename can be given using the `-o` switch. If omitted, the output filename is generated based on the input filename suffixed by `-quickstart` or `-onboarding`, depending on the ISO image format.
 
 ### Running on Windows
 
@@ -60,7 +66,8 @@ On modern macOS/Linux installations there should be python3 pre-installed, so th
 ```
 cd ~/Downloads/128T
 chmod +x t128-customize-otp-iso-image.pyz
-./t128-customize-otp-iso-image.pyz -i 128T-<version>OTP.v1.x86_64.iso -c 10.128.128.128,
+./t128-customize-otp-iso-image.pyz -i 128T-<version>OTP.v1.x86_64.iso -c 10.128.128.128   # PBU
+./t128-customize-otp-iso-image.pyz -i SSR-<version>.x86_64.ibu-v1.iso -c 10.128.128.128   # IBU
 ```
 
 ## Scriptlets
